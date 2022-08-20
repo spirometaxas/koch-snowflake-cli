@@ -30,22 +30,26 @@ const createBoard = function(w, h) {
   return board;
 }
 
-const createMaskBoard = function(w, h) {
+const createMaskBoard = function(w, h, character) {
   let board = [];
   for (let i = 0; i < h; i++) {
     let row = [];
     for (let j = 0; j < w; j++) {
-      if (i % 2 === 0) {
-        if (j % 2 === 0) {
-          row.push('▼');
-        } else {
-          row.push('▲');
-        }
+      if (character) {
+        row.push(character);
       } else {
-        if (j % 2 === 0) {
-          row.push('▲');
+        if (i % 2 === 0) {
+          if (j % 2 === 0) {
+            row.push('▼');
+          } else {
+            row.push('▲');
+          }
         } else {
-          row.push('▼');
+          if (j % 2 === 0) {
+            row.push('▲');
+          } else {
+            row.push('▼');
+          }
         }
       }
     }
@@ -54,16 +58,20 @@ const createMaskBoard = function(w, h) {
   return board;
 }
 
-const drawTriangle = function(board, pos, scale) {
+const drawTriangle = function(board, pos, scale, character) {
   var curW = getWidth(scale);
   var startX = pos.x - parseInt(curW / 2.0);
   var curY = pos.y;
   for (let i = 0; i < getHeight(scale); i++) {
     for (let j = 0; j < curW; j++) {
-      if (j % 2 === 0) {
-        board[curY][startX + j] = '▲';
+      if (character) {
+        board[curY][startX + j] = character;
       } else {
-        board[curY][startX + j] = '▼';
+        if (j % 2 === 0) {
+          board[curY][startX + j] = '▲';
+        } else {
+          board[curY][startX + j] = '▼';
+        }
       }
     }
     curW -= 2;
@@ -254,25 +262,29 @@ const applyMask = function(snowflakeMaskBoard, maskBoard) {
   }
 }
 
-const create = function(n, scale) {
+const create = function(n, config) {
   if (n === undefined || n < 0) {
     return '';
   }
-  if (scale === undefined || scale < n) {
-    scale = n;
+  
+  let scale = n;
+  if (config && config.scale && config.scale > n) {
+    scale = config.scale;
   }
+
+  const character = config !== undefined && config.character !== undefined && config.character.length === 1 ? config.character : undefined;
 
   if (n === 0) {
     const triangleBoard = createBoard(getWidth(scale), getHeight(scale));
-    drawTriangle(triangleBoard, { x: parseInt(getWidth(scale) / 2.0), y: parseInt(getHeight(scale) / 4.0) }, scale);
+    drawTriangle(triangleBoard, { x: parseInt(getWidth(scale) / 2.0), y: parseInt(getHeight(scale) / 4.0) }, scale, character);
     return draw(triangleBoard);
   } else {
-    const hexagon = sierpinski.create(n, scale);
+    const hexagon = sierpinski.create(n, { scale: scale });
     const hexagonBoard = hexagonToBoard(hexagon);
     const snowflakeMaskBoard = createBoard(hexagonBoard[0].length, hexagonBoard.length);
     findSnowflake(hexagonBoard, snowflakeMaskBoard);
     trimBoard(snowflakeMaskBoard, scale);
-    const maskBoard = createMaskBoard(snowflakeMaskBoard[0].length, snowflakeMaskBoard.length);
+    const maskBoard = createMaskBoard(snowflakeMaskBoard[0].length, snowflakeMaskBoard.length, character);
     applyMask(snowflakeMaskBoard, maskBoard);
     return draw(snowflakeMaskBoard);
   }

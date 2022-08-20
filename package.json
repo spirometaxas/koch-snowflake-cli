@@ -1,6 +1,6 @@
 {
   "name": "koch-snowflake-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Print the Koch Snowflake to the console!",
   "main": "./src/index.js",
   "bin": {
@@ -13,10 +13,14 @@
     "type": "git",
     "url": "https://github.com/spirometaxas/koch-snowflake-cli.git"
   },
+  "homepage": "https://spirometaxas.com/projects/fractals-cli",
   "scripts": {
     "cli": "node ./src/cli.js"
   },
-  "author": "Spiro Metaxas",
+  "author": {
+    "name" : "Spiro Metaxas",
+    "url" : "https://spirometaxas.com"
+  },
   "license": "MIT",
   "keywords": [
     "Koch",
@@ -31,6 +35,6 @@
     "unicode"
   ],
   "dependencies": {
-    "sierpinski-hexagon-cli": "^1.0.0"
+    "sierpinski-hexagon-cli": "^1.1.0"
   }
 }
