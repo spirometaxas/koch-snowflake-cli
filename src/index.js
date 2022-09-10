@@ -58,11 +58,11 @@ const createMaskBoard = function(w, h, character) {
   return board;
 }
 
-const drawTriangle = function(board, pos, scale, character) {
-  var curW = getWidth(scale);
+const drawTriangle = function(board, pos, size, character) {
+  var curW = getWidth(size);
   var startX = pos.x - parseInt(curW / 2.0);
   var curY = pos.y;
-  for (let i = 0; i < getHeight(scale); i++) {
+  for (let i = 0; i < getHeight(size); i++) {
     for (let j = 0; j < curW; j++) {
       if (character) {
         board[curY][startX + j] = character;
@@ -149,11 +149,11 @@ const getRightBuffer = function(board) {
   return buffer;
 }
 
-const trimBoard = function(board, scale) {
-  const targetHeight = getHeight(scale);
+const trimBoard = function(board, size) {
+  const targetHeight = getHeight(size);
   const bufferH = board.length - targetHeight;
 
-  const targetWidth = getWidth(scale);
+  const targetWidth = getWidth(size);
   const bufferW = board[0].length - targetWidth;
 
   // Trim Top
@@ -267,23 +267,23 @@ const create = function(n, config) {
     return '';
   }
   
-  let scale = n;
-  if (config && config.scale && config.scale > n) {
-    scale = config.scale;
+  let size = n;
+  if (config && config.size && config.size > n) {
+    size = config.size;
   }
 
   const character = config !== undefined && config.character !== undefined && config.character.length === 1 ? config.character : undefined;
 
   if (n === 0) {
-    const triangleBoard = createBoard(getWidth(scale), getHeight(scale));
-    drawTriangle(triangleBoard, { x: parseInt(getWidth(scale) / 2.0), y: parseInt(getHeight(scale) / 4.0) }, scale, character);
+    const triangleBoard = createBoard(getWidth(size), getHeight(size));
+    drawTriangle(triangleBoard, { x: parseInt(getWidth(size) / 2.0), y: parseInt(getHeight(size) / 4.0) }, size, character);
     return draw(triangleBoard);
   } else {
-    const hexagon = sierpinski.create(n, { scale: scale });
+    const hexagon = sierpinski.create(n, { size: size });
     const hexagonBoard = hexagonToBoard(hexagon);
     const snowflakeMaskBoard = createBoard(hexagonBoard[0].length, hexagonBoard.length);
     findSnowflake(hexagonBoard, snowflakeMaskBoard);
-    trimBoard(snowflakeMaskBoard, scale);
+    trimBoard(snowflakeMaskBoard, size);
     const maskBoard = createMaskBoard(snowflakeMaskBoard[0].length, snowflakeMaskBoard.length, character);
     applyMask(snowflakeMaskBoard, maskBoard);
     return draw(snowflakeMaskBoard);

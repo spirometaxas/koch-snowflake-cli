@@ -27,7 +27,7 @@ then:
 ```
 const koch_snowflake = require('koch-snowflake-cli');
 console.log(koch_snowflake.create(<n>));
-console.log(koch_snowflake.create(<n>, { size: <size>, character: <character> }));
+console.log(koch_snowflake.create(<n>, { size: <number>, character: <character> }));
 ```
 The config params are optional.
 
