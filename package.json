@@ -1,6 +1,6 @@
 {
   "name": "koch-snowflake-cli",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Print the Koch Snowflake to the console!",
   "main": "./src/index.js",
   "bin": {
@@ -35,6 +35,6 @@
     "unicode"
   ],
   "dependencies": {
-    "sierpinski-hexagon-cli": "1.2.2"
+    "sierpinski-hexagon-cli": "1.3.0"
   }
 }
